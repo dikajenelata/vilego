@@ -1,0 +1,5 @@
+{
+  "name": "VILEGO Brick Order",
+  "description": "A specialized ordering system for VILEGO game participants to manage brick requests per layer and subcontractor.",
+  "requestFramePermissions": []
+}
