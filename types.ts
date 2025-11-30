@@ -1,4 +1,4 @@
-export type BrickSize = '1x1' | '1x2' | '1x3' | '1x4' | '1x6' | '1x8' | '2x2' | '2x3' | '2x4' | '2x6';
+export type BrickSize = '1x1' | '1x2' | '1x3' | '1x4' | '1x6' | '1x8' | '2x2' | '2x3' | '2x4' | '2x6' | 'PELAT';
 
 export interface BrickColor {
   id: string;

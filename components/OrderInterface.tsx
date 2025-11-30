@@ -10,12 +10,33 @@ interface OrderInterfaceProps {
 }
 
 const BrickVisual = ({ size, color }: { size: BrickSize, color: BrickColor }) => {
-    // Parse size. Assuming standard Lego naming where 2x4 means 2 studs width (columns) and 4 studs length (rows)
-    // However, conventionally usually usually Width x Length.
-    // Based on screenshot 2x4 is vertical. So 2 cols, 4 rows.
-    const [cols, rows] = size.split('x').map(Number);
-    const cellSize = 28; // px
-    const gap = 4; // px
+    // Determine dimensions
+    let cols = 0;
+    let rows = 0;
+
+    if (size === 'PELAT') {
+        // Visual representation for 'PELAT' (Plate), 16x16
+        cols = 16;
+        rows = 16;
+    } else {
+        const parts = size.split('x');
+        if (parts.length === 2) {
+            cols = Number(parts[0]);
+            rows = Number(parts[1]);
+        }
+    }
+    
+    // Fallback if parsing fails
+    if (!cols || !rows) {
+        cols = 2; 
+        rows = 2;
+    }
+
+    // Adaptive sizing: Reduce cell size for large grids (like PELAT 16x16) to fit screen
+    const isLarge = cols > 8 || rows > 8;
+    const cellSize = isLarge ? 12 : 28; // px
+    const gap = isLarge ? 2 : 4; // px
+    const minDotSize = isLarge ? '4px' : '12px';
     
     return (
       <div 
@@ -29,7 +50,11 @@ const BrickVisual = ({ size, color }: { size: BrickSize, color: BrickColor }) =>
         }}
       >
         {Array.from({ length: cols * rows }).map((_, i) => (
-           <div key={i} className="w-full h-full min-w-[12px] min-h-[12px] rounded-full bg-black/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] border border-black/5" />
+           <div 
+             key={i} 
+             className="w-full h-full rounded-full bg-black/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] border border-black/5" 
+             style={{ minWidth: minDotSize, minHeight: minDotSize }}
+           />
         ))}
       </div>
     );
@@ -157,7 +182,7 @@ const OrderInterface: React.FC<OrderInterfaceProps> = ({ subkon, onBack }) => {
                 {/* Size Selection */}
                 <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Ukuran</label>
-                    <div className="grid grid-cols-5 gap-3">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                         {BRICK_SIZES.map(size => (
                             <button
                                 key={size}
@@ -201,20 +226,18 @@ const OrderInterface: React.FC<OrderInterfaceProps> = ({ subkon, onBack }) => {
             <div className="bg-gray-50 p-6 border-t border-gray-100">
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6">
                     {/* Visual Preview */}
-                    <div className="flex flex-col items-center w-full sm:w-auto min-h-[16rem]">
-                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Preview</label>
+                    <div className="flex-1 flex flex-col items-center justify-center min-h-[16rem] gap-4">
+                         <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">Preview</label>
                          
-                         <div className="flex-1 flex items-center justify-center py-4">
-                             <BrickVisual size={selectedSize} color={selectedColor} />
-                         </div>
+                         <BrickVisual size={selectedSize} color={selectedColor} />
                          
-                         <div className="relative px-3 py-1 bg-white rounded-full border border-gray-200 text-xs font-medium text-gray-500 shadow-sm whitespace-nowrap z-10 mt-2">
+                         <div className="px-3 py-1 bg-white rounded-full border border-gray-200 text-xs font-medium text-gray-500 shadow-sm whitespace-nowrap">
                              {selectedSize} • {selectedColor.name}
                          </div>
                     </div>
 
                     {/* Quantity & Add */}
-                    <div className="flex flex-col items-end gap-4 w-full sm:w-auto">
+                    <div className="flex flex-col items-center justify-center sm:items-end gap-4 w-full sm:w-auto">
                         <div className="bg-white p-1 rounded-xl border border-gray-200 shadow-sm flex items-center justify-center w-full sm:w-auto">
                             <button 
                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}

@@ -18,13 +18,24 @@ const BrickInput: React.FC<BrickInputProps> = ({ size, color, value, onChange })
     onChange(value + 1);
   };
 
+  // Safe width calculation
+  let widthVal = '2rem';
+  if (size === 'PELAT') {
+    widthVal = '3rem';
+  } else {
+    const parts = size.split('x');
+    if (parts.length === 2) {
+        widthVal = `${Math.max(2, parseInt(parts[1]) * 0.8)}rem`;
+    }
+  }
+
   return (
     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors border border-transparent hover:border-gray-200">
       <div className="flex items-center space-x-3">
         {/* Visual representation of the brick */}
         <div 
           className={`h-8 rounded shadow-sm flex items-center justify-center text-[10px] font-bold ${color.hexClass} ${color.textColorClass}`}
-          style={{ width: `${Math.max(2, parseInt(size.split('x')[1]) * 0.8)}rem` }} // Approximate dynamic width
+          style={{ width: widthVal }} 
         >
           {size}
         </div>

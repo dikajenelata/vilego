@@ -2,7 +2,7 @@ import { BrickColor, BrickSize, Subkon } from './types';
 
 export const BRICK_SIZES: BrickSize[] = [
   '1x1', '1x2', '1x3', '1x4', '1x6', '1x8', 
-  '2x2', '2x3', '2x4', '2x6'
+  '2x2', '2x3', '2x4', '2x6', 'PELAT'
 ];
 
 export const COLORS: Record<string, BrickColor> = {
