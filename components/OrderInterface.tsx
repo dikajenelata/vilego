@@ -279,12 +279,14 @@ const OrderInterface: React.FC<OrderInterfaceProps> = ({ subkon, onBack }) => {
 
       {/* Mobile Summary Modal */}
       {isSummaryOpen && (
-        <div className="fixed inset-0 z-50 md:hidden flex flex-col justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div 
+            className="fixed inset-0 z-50 md:hidden flex flex-col justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={() => setIsSummaryOpen(false)}
+        >
             <div 
-                className="absolute inset-0" 
-                onClick={() => setIsSummaryOpen(false)}
-            />
-            <div className="bg-white rounded-t-2xl shadow-xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300">
+                className="bg-white rounded-t-2xl shadow-xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in slide-in-from-bottom duration-300"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="flex justify-center pt-3 pb-2" onClick={() => setIsSummaryOpen(false)}>
                     <div className="w-12 h-1.5 bg-gray-200 rounded-full"></div>
                 </div>
